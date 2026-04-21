@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <rect width="128" height="128" rx="22" fill="#2563eb"/>
+  <!-- Two H letterforms suggesting HH / hop -->
+  <rect x="18" y="30" width="10" height="68" rx="3" fill="white"/>
+  <rect x="18" y="60" width="30" height="10" rx="2" fill="white"/>
+  <rect x="38" y="30" width="10" height="68" rx="3" fill="white"/>
+  <!-- Arrow suggesting navigation -->
+  <rect x="60" y="60" width="32" height="10" rx="3" fill="rgba(255,255,255,0.7)"/>
+  <polygon points="98,65 86,53 86,77" fill="rgba(255,255,255,0.7)"/>
+</svg>

@@ -1,0 +1,59 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Package & Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install sharp for icon generation
+        run: npm install sharp --no-save
+
+      - name: Generate icons
+        run: node scripts/generate-icons.js
+
+      - name: Get version from tag
+        id: version
+        run: echo "version=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
+
+      - name: Build Chrome
+        run: node scripts/build.js chrome
+
+      - name: Build Firefox
+        run: node scripts/build.js firefox
+
+      - name: Lint Firefox
+        run: npx web-ext lint -s dist/firefox --warnings-as-errors
+
+      - name: Package Chrome
+        run: |
+          mkdir -p releases
+          cd dist/chrome && zip -r ../../releases/hubhop-chrome-${{ steps.version.outputs.version }}.zip .
+
+      - name: Package Firefox
+        run: npx web-ext build -s dist/firefox -a releases --overwrite-dest
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: releases/*
+          generate_release_notes: true
+          draft: false
+          prerelease: ${{ contains(github.ref_name, '-') }}

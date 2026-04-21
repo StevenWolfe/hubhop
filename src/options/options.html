@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HubHop Settings</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <header>
+    <h1>🐇 HubHop</h1>
+    <p class="tagline">Type <code>hh &lt;repo&gt;</code> in the address bar to jump anywhere.</p>
+  </header>
+
+  <main>
+
+    <section id="section-token">
+      <h2>GitHub Token</h2>
+      <p>Required for private repos and to avoid API rate limits. <a href="https://github.com/settings/tokens/new?description=HubHop&scopes=repo,read:org" target="_blank">Generate a token →</a></p>
+      <div class="row">
+        <input type="password" id="token" placeholder="ghp_…" autocomplete="off" spellcheck="false">
+        <button id="save-token">Save</button>
+      </div>
+      <p id="token-status" class="status"></p>
+    </section>
+
+    <section id="section-instances">
+      <h2>GitHub Enterprise Instances</h2>
+      <p>Add any number of GHES instances. github.com is always included.</p>
+      <ul id="instances-list" class="item-list"></ul>
+      <div class="add-form">
+        <input type="text" id="instance-name" placeholder="Name (e.g. Work)">
+        <input type="url" id="instance-url" placeholder="https://github.example.com">
+        <button id="add-instance">Add</button>
+      </div>
+      <p id="instances-status" class="status"></p>
+    </section>
+
+    <section id="section-orgs">
+      <h2>Organizations</h2>
+      <p>HubHop fetches all repos in these orgs hourly and keeps them ready in the address bar.</p>
+      <ul id="orgs-list" class="item-list"></ul>
+      <div class="add-form">
+        <input type="text" id="org-name" placeholder="org-name">
+        <select id="org-instance"></select>
+        <button id="add-org">Add</button>
+      </div>
+      <p id="orgs-status" class="status"></p>
+    </section>
+
+    <section id="section-repos">
+      <h2>Individual Repos</h2>
+      <p>Pin specific repos that aren't in an org you've added.</p>
+      <ul id="repos-list" class="item-list"></ul>
+      <div class="add-form">
+        <input type="text" id="repo-name" placeholder="owner/repo">
+        <select id="repo-instance"></select>
+        <button id="add-repo">Add</button>
+      </div>
+      <p id="repos-status" class="status"></p>
+    </section>
+
+    <section id="section-cache">
+      <h2>Repo Cache</h2>
+      <p id="cache-status">Loading…</p>
+      <button id="refresh-now">Refresh Now</button>
+    </section>
+
+  </main>
+
+  <script src="options.js"></script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: Build & Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate icons
+        run: |
+          npm install sharp --no-save
+          node scripts/generate-icons.js
+        continue-on-error: true  # non-blocking until icons are finalized
+
+      - name: Build Chrome
+        run: node scripts/build.js chrome
+
+      - name: Build Firefox
+        run: node scripts/build.js firefox
+
+      - name: Lint (web-ext)
+        run: npx web-ext lint -s dist/firefox --warnings-as-errors
+
+      - name: Upload Chrome artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hubhop-chrome
+          path: dist/chrome/
+
+      - name: Upload Firefox artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hubhop-firefox
+          path: dist/firefox/
