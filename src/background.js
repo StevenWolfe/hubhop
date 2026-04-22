@@ -205,6 +205,12 @@ chrome.omnibox.onInputEntered.addListener(async (text, disposition) => {
   await navigateTo(url, disposition);
 });
 
+// ── Toolbar icon → open options ──────────────────────────────────────────────
+
+chrome.action.onClicked.addListener(() => {
+  chrome.runtime.openOptionsPage();
+});
+
 // ── Alarm-based refresh ──────────────────────────────────────────────────────
 
 chrome.alarms.onAlarm.addListener(alarm => {
