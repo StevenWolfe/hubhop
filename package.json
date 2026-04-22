@@ -1,6 +1,6 @@
 {
   "name": "hubhop",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "type": "module",
   "description": "Jump to any GitHub repo from your browser address bar. Type 'hh <repo>' and go.",
@@ -8,7 +8,7 @@
     "build": "npm run build:chrome && npm run build:firefox",
     "build:chrome": "node scripts/build.js chrome",
     "build:firefox": "node scripts/build.js firefox",
-    "package:chrome": "npm run build:chrome && cd dist/chrome && zip -r ../../releases/hubhop-chrome-$npm_package_version.zip . && echo 'Packaged dist/chrome → releases/'",
+    "package:chrome": "npm run build:chrome && cd dist/chrome && zip -r ../../releases/hubhop-chrome-$npm_package_version.zip . && echo 'Packaged dist/chrome \u2192 releases/'",
     "package:firefox": "npm run build:firefox && web-ext build -s dist/firefox -a releases --overwrite-dest",
     "package": "npm run package:chrome && npm run package:firefox",
     "dev:chrome": "node scripts/build.js chrome --watch",

@@ -167,12 +167,15 @@ function render() {
       span.appendChild(el('span', { cls: 'item-meta', text: i.url }));
     },
     idx => {
-      // Remove token for deleted instance too
       const removed = settings.instances[idx];
       settings.instances.splice(idx, 1);
       if (removed) {
+        // Remove token for deleted instance
         const { [removed.name]: _, ...rest } = settings.tokens;
         settings.tokens = rest;
+        // Revoke optional host permission for this instance's URL
+        chrome.permissions.remove({ origins: [`${new URL(removed.url).origin}/*`] })
+          .catch(() => {}); // best-effort
       }
       saveSettings().then(render);
     }
@@ -255,6 +258,22 @@ document.getElementById('add-instance').addEventListener('click', async () => {
   if (name === 'GitHub' || settings.instances.find(i => i.name === name)) {
     setStatus('instances-status', `"${name}" already exists.`, 'err'); return;
   }
+
+  // Request host permission for this GHES instance before saving.
+  // Must be called directly from a user gesture (this click handler qualifies).
+  const origin = `${new URL(url).origin}/*`;
+  try {
+    const granted = await chrome.permissions.request({ origins: [origin] });
+    if (!granted) {
+      setStatus('instances-status', `Permission denied for ${url} — API calls will fail.`, 'err');
+      return;
+    }
+  } catch {
+    // permissions API unavailable (shouldn't happen in a modern extension page)
+    setStatus('instances-status', `Could not request permission for ${url}.`, 'err');
+    return;
+  }
+
   settings.instances.push({ name, url });
   await saveSettings();
   document.getElementById('instance-name').value = '';

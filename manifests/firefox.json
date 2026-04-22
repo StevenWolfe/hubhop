@@ -1,16 +1,24 @@
 {
   "manifest_version": 3,
   "name": "HubHop",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Jump to any GitHub repo from the address bar. Type 'hh <repo>' and go.",
-  "permissions": ["omnibox", "storage", "alarms", "tabs"],
+  "permissions": [
+    "storage",
+    "alarms",
+    "tabs"
+  ],
   "host_permissions": [
     "https://github.com/*",
-    "https://api.github.com/*",
+    "https://api.github.com/*"
+  ],
+  "optional_host_permissions": [
     "*://*/*"
   ],
   "background": {
-    "scripts": ["background.js"]
+    "scripts": [
+      "background.js"
+    ]
   },
   "omnibox": {
     "keyword": "hh"
