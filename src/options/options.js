@@ -217,10 +217,13 @@ async function loadCacheStatus() {
   try {
     const resp = await chrome.runtime.sendMessage({ type: 'get-cache-status' });
     if (resp?.count !== undefined) {
+      const age = resp.lastRefresh ? Date.now() - resp.lastRefresh : Infinity;
+      const stale = age > 2 * 60 * 60 * 1000; // >2h
       const when = resp.lastRefresh
-        ? `Last refreshed ${new Date(resp.lastRefresh).toLocaleString()}.`
+        ? `Last refreshed ${new Date(resp.lastRefresh).toLocaleString()}.${stale ? ' (stale)' : ''}`
         : 'Never refreshed.';
       statusEl.textContent = `${resp.count} repos cached. ${when}`;
+      statusEl.className = stale || !resp.lastRefresh ? 'status-stale' : '';
     }
 
     errorsEl.innerHTML = '';

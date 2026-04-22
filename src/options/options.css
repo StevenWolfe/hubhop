@@ -251,6 +251,9 @@ button.secondary:hover { background: var(--border); }
   color: var(--text);
 }
 
+/* ── Cache staleness ── */
+.status-stale { color: #d29922; }
+
 /* ── Fetch error list ── */
 #fetch-errors { margin-top: 8px; }
 #fetch-errors code { font-size: 12px; }
