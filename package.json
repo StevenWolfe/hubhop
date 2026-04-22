@@ -2,6 +2,7 @@
   "name": "hubhop",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "description": "Jump to any GitHub repo from your browser address bar. Type 'hh <repo>' and go.",
   "scripts": {
     "build": "npm run build:chrome && npm run build:firefox",
