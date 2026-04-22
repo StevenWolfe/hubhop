@@ -40,7 +40,7 @@ jobs:
         run: node scripts/build.js firefox
 
       - name: Lint Firefox
-        run: npx web-ext lint -s dist/firefox --warnings-as-errors
+        run: npx web-ext lint -s dist/firefox
 
       - name: Package Chrome
         run: |

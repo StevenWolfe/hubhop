@@ -8,25 +8,15 @@
 </head>
 <body>
   <header>
-    <h1>🐇 HubHop</h1>
+    <h1>HubHop</h1>
     <p class="tagline">Type <code>hh &lt;repo&gt;</code> in the address bar to jump anywhere.</p>
   </header>
 
   <main>
 
-    <section id="section-token">
-      <h2>GitHub Token</h2>
-      <p>Required for private repos and to avoid API rate limits. <a href="https://github.com/settings/tokens/new?description=HubHop&scopes=repo,read:org" target="_blank">Generate a token →</a></p>
-      <div class="row">
-        <input type="password" id="token" placeholder="ghp_…" autocomplete="off" spellcheck="false">
-        <button id="save-token">Save</button>
-      </div>
-      <p id="token-status" class="status"></p>
-    </section>
-
     <section id="section-instances">
-      <h2>GitHub Enterprise Instances</h2>
-      <p>Add any number of GHES instances. github.com is always included.</p>
+      <h2>GitHub Instances</h2>
+      <p>github.com is always included. Add GitHub Enterprise Server instances here.</p>
       <ul id="instances-list" class="item-list"></ul>
       <div class="add-form">
         <input type="text" id="instance-name" placeholder="Name (e.g. Work)">
@@ -36,33 +26,48 @@
       <p id="instances-status" class="status"></p>
     </section>
 
+    <section id="section-tokens">
+      <h2>Tokens</h2>
+      <p>
+        Personal access token per instance — required for private repos and to raise the API rate limit.
+        <a id="token-help-link" href="https://github.com/settings/tokens/new?description=HubHop&scopes=repo,read:org" target="_blank">Create a token →</a>
+      </p>
+      <p class="callout callout-warn">
+        Browser extension storage is not encrypted. Use a dedicated PAT with minimal scopes
+        (<code>repo</code>, <code>read:org</code>) — not your main personal token.
+      </p>
+      <div id="tokens-list"></div>
+      <p id="tokens-status" class="status"></p>
+    </section>
+
     <section id="section-orgs">
-      <h2>Organizations</h2>
-      <p>HubHop fetches all repos in these orgs hourly and keeps them ready in the address bar.</p>
+      <h2>Pinned Orgs</h2>
+      <p>All repos in a pinned org are available in the address bar. HubHop fetches the full list hourly.</p>
       <ul id="orgs-list" class="item-list"></ul>
       <div class="add-form">
         <input type="text" id="org-name" placeholder="org-name">
         <select id="org-instance"></select>
-        <button id="add-org">Add</button>
+        <button id="add-org">Pin Org</button>
       </div>
       <p id="orgs-status" class="status"></p>
     </section>
 
     <section id="section-repos">
-      <h2>Individual Repos</h2>
-      <p>Pin specific repos that aren't in an org you've added.</p>
+      <h2>Pinned Repos</h2>
+      <p>Pin individual repos that aren't in a pinned org.</p>
       <ul id="repos-list" class="item-list"></ul>
       <div class="add-form">
         <input type="text" id="repo-name" placeholder="owner/repo">
         <select id="repo-instance"></select>
-        <button id="add-repo">Add</button>
+        <button id="add-repo">Pin Repo</button>
       </div>
       <p id="repos-status" class="status"></p>
     </section>
 
     <section id="section-cache">
-      <h2>Repo Cache</h2>
+      <h2>Cache</h2>
       <p id="cache-status">Loading…</p>
+      <div id="fetch-errors"></div>
       <button id="refresh-now">Refresh Now</button>
     </section>
 

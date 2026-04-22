@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 *)",
+      "Bash(gh issue *)",
+      "Bash(gh label *)",
+      "Bash(node scripts/build.js chrome)",
+      "Bash(node scripts/build.js firefox)",
+      "Bash(npx web-ext *)",
+      "Bash(echo \"exit: $?\")"
+    ]
+  }
+}

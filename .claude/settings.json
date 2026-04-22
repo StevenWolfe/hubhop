@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C * log *)",
+      "Bash(git -C * status *)",
+      "Bash(git -C * remote *)",
+      "Bash(git -C * show *)"
+    ]
+  }
+}
