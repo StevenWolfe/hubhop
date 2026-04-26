@@ -163,53 +163,49 @@ async function navigateTo(url, disposition) {
   }
 }
 
-// ── Omnibox ──────────────────────────────────────────────────────────────────
+// ── Omnibox (desktop only — not available on Firefox for Android) ─────────────
 
-chrome.omnibox.onInputChanged.addListener(async (text, suggest) => {
-  const repos = await getCachedRepos();
-  const matches = searchRepos(repos, text.trim());
+if (chrome.omnibox) {
+  chrome.omnibox.onInputChanged.addListener(async (text, suggest) => {
+    const repos = await getCachedRepos();
+    const matches = searchRepos(repos, text.trim());
 
-  if (!matches.length) {
-    suggest([{
-      content: text,
-      description: `Go to <url>github.com/${text}</url>`,
-    }]);
-    return;
-  }
+    if (!matches.length) {
+      suggest([{
+        content: text,
+        description: `Go to <url>github.com/${text}</url>`,
+      }]);
+      return;
+    }
 
-  suggest(matches.map(repo => ({
-    content: repo.full_name,
-    description: `<match>${repo.full_name}</match>` +
-      (repo.instance !== 'GitHub' ? ` <dim>· ${repo.instance}</dim>` : ''),
-  })));
-});
+    suggest(matches.map(repo => ({
+      content: repo.full_name,
+      description: `<match>${repo.full_name}</match>` +
+        (repo.instance !== 'GitHub' ? ` <dim>· ${repo.instance}</dim>` : ''),
+    })));
+  });
 
-chrome.omnibox.onInputEntered.addListener(async (text, disposition) => {
-  const settings = await getSettings();
-  const repos = await getCachedRepos();
-  const query = text.trim();
+  chrome.omnibox.onInputEntered.addListener(async (text, disposition) => {
+    const settings = await getSettings();
+    const repos = await getCachedRepos();
+    const query = text.trim();
 
-  const match = repos.find(r => r.full_name === query)
-    ?? repos.find(r => scoreRepo(r, query) > 0);
+    const match = repos.find(r => r.full_name === query)
+      ?? repos.find(r => scoreRepo(r, query) > 0);
 
-  let url;
-  if (match) {
-    const instance = instanceByName(settings, match.instance);
-    url = `${instance.url}/${match.full_name}`;
-  } else {
-    url = query.includes('/')
-      ? `https://github.com/${query}`
-      : `https://github.com/search?q=${encodeURIComponent(query)}&type=repositories`;
-  }
+    let url;
+    if (match) {
+      const instance = instanceByName(settings, match.instance);
+      url = `${instance.url}/${match.full_name}`;
+    } else {
+      url = query.includes('/')
+        ? `https://github.com/${query}`
+        : `https://github.com/search?q=${encodeURIComponent(query)}&type=repositories`;
+    }
 
-  await navigateTo(url, disposition);
-});
-
-// ── Toolbar icon → open options ──────────────────────────────────────────────
-
-chrome.action.onClicked.addListener(() => {
-  chrome.runtime.openOptionsPage();
-});
+    await navigateTo(url, disposition);
+  });
+}
 
 // ── Alarm-based refresh ──────────────────────────────────────────────────────
 
